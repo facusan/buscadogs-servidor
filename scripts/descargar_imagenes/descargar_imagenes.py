@@ -14,8 +14,12 @@ def descargar_imagenes():
     parser.add_argument('-q', '--query', help='Búsqueda a realizar', type=str, required=True)
     parser.add_argument('-f', '--folder', help='Nombre de la carpeta', type=str, required=False, default="Resultados")
     parser.add_argument('-c', '--count', help='Cantidad de imágenes a descargar', type=int, required=False, default=100)
+    parser.add_argument('-n', '--number', help='Número por el cual empezar a numerar las imágenes', type=int, required=False, default=0)
+    parser.add_argument('-r', '--root', help='Nombre raíz de los archivos descargados', type=str, required=False, default="")
     args = parser.parse_args()
-    nombreRaizImagen = args.query
+    nombreRaizImagen = args.root
+    if nombreRaizImagen == "":
+        nombreRaizImagen = args.query
     busqueda = args.query.replace(" ", "+")
     nombreCarpeta = args.folder
     total = args.count
@@ -84,7 +88,7 @@ def descargar_imagenes():
                 print("Descargando", contador, "de", total)
                 enlace = imagen.attrs.get('src')
                 if enlace != None:
-                    urllib.request.urlretrieve(enlace, nombreCarpeta + "\\" + nombreRaizImagen +  str(contador) +  ".jpg")
+                    urllib.request.urlretrieve(enlace, nombreCarpeta + "\\" + nombreRaizImagen +  str(args.number + contador - 1) +  ".jpg")
                     totalDescargadas += 1
             except Exception as e:
                 print("La descarga falló:", e)
